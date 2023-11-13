@@ -1,32 +1,28 @@
 Link de la Pagina: 
 https://tpkxttxx.github.io
 
-version: '3'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My PHP App</title>
+</head>
+<body>
+    <h1>Hello, this is my PHP App!</h1>
 
-services:
-  web:
-    image: php:7.4-apache
-    container_name: my-php-app
-    volumes:
-      - ./src:/var/www/html
-    ports:
-      - "8080:80"
-    environment:
-      MYSQL_HOST: db
-      MYSQL_DATABASE: my_database
-      MYSQL_USER: my_user
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-my_secret_password}
+    <?php
+    // Establecer conexión a la base de datos MySQL
+    $conn = new mysqli(getenv('MYSQL_HOST'), getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'), getenv('MYSQL_DATABASE'));
 
-  db:
-    image: mariadb:latest
-    container_name: my-mysql-db
-    volumes:
-      - db_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
-      MYSQL_DATABASE: my_database
-      MYSQL_USER: my_user
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-my_secret_password}
+    // Verificar la conexión
+    if ($conn->connect_error) {
+        die("Error de conexión a la base de datos: " . $conn->connect_error);
+    }
 
-volumes:
-  db_data:
+    echo "<p>Conexión a la base de datos MySQL exitosa.</p>";
+
+    // Cerrar la conexión
+    $conn->close();
+    ?>
+</body>
+</html>
+
